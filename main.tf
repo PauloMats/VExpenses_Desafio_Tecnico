@@ -155,17 +155,6 @@ resource "aws_instance" "debian_ec2" {
   }
 }
 
-  user_data = <<-EOF
-              #!/bin/bash
-              apt-get update -y
-              apt-get upgrade -y
-              EOF
-
-  tags = {
-    Name = "${var.projeto}-${var.candidato}-ec2"
-  }
-}
-
 output "private_key" {
   description = "Chave privada para acessar a instância EC2"
   value       = tls_private_key.ec2_key.private_key_pem
