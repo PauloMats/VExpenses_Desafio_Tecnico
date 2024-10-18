@@ -3,13 +3,13 @@ provider "aws" {
 }
 
 variable "projeto" {
-  description = "Nome do projeto"
+  description = "Desafio Técnico VExpenses"
   type        = string
   default     = "VExpenses"
 }
 
 variable "candidato" {
-  description = "Nome do candidato"
+  description = "Paulo Mateus dos Santos Silva"
   type        = string
   default     = "SeuNome"
 }
@@ -76,17 +76,24 @@ resource "aws_route_table_association" "main_association" {
 
 resource "aws_security_group" "main_sg" {
   name        = "${var.projeto}-${var.candidato}-sg"
-  description = "Permitir SSH de qualquer lugar e todo o tráfego de saída"
+  description = "Permitir apenas SSH do IP de confiança e tráfego HTTP para Nginx"
   vpc_id      = aws_vpc.main_vpc.id
 
   # Regras de entrada
   ingress {
-    description      = "Allow SSH from anywhere"
+    description      = "Allow SSH from trusted IP"
     from_port        = 22
     to_port          = 22
     protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    cidr_blocks      = ["45.234.46.35/32"]
+  }
+
+   ingress {
+    description = "Allow HTTP traffic"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # Regras de saída
